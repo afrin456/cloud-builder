@@ -2,14 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: hello
-  name: hello
+    app: sample-hello
+  name: sample-hello
   namespace: default
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
-      app: hello
+      app: sample-hello
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       labels:
-        app: hello
+        app: sample-hello
     spec:
       containers:
         - image: gcr.io/voltaic-cirrus-292815/github.com/afrin456/cloud-builder
@@ -29,8 +29,8 @@ apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
   labels:
-    app: hello
-  name: hello-hpa-vido
+    app: sample-hello
+  name: sample-hello-hpa-5ijy
   namespace: default
 spec:
   maxReplicas: 5
@@ -43,26 +43,4 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: hello
----
-apiVersion: v1
-kind: Service
-metadata:
-  finalizers:
-    - service.kubernetes.io/load-balancer-cleanup
-  labels:
-    app: hello
-  name: hello-service
-  namespace: default
-spec:
-  clusterIP: 10.3.250.194
-  externalTrafficPolicy: Cluster
-  ports:
-    - nodePort: 30452
-      port: 80
-      protocol: TCP
-      targetPort: 3000
-  selector:
-    app: hello
-  sessionAffinity: None
-  type: LoadBalancer
+    name: sample-hello
